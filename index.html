@@ -56,12 +56,48 @@
             <section class="resume-section" id="Lab1">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Lab1</h2>
+                    <p>The purpose of first Lab is to setup the Arduino IDE and the Artemis board, and test hardware components on the board.</p>
+                    <p>Before the lab, I intalled the latest version of Arduino IDE. </p>
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                         <div class="flex-grow-1">
-                            <div class="subheading mb-3">Lab Report</div>
-                            <p>Arduino IDE</p>
+                            <div class="subheading mb-3">Step One</div>
+                            <p>Connect the Artemis board to my computer, and follow the instruction provided in course website to install the Arduino Core for Apollo3</p>
                         </div>
                     </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Blink</div>
+                            <p>After selecting board nano and USB port, I followed the instruction example: blink it up. I chose the blink example and the result showed as below video:</p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/xPFauOEw6mc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Serial</div>
+                            <p>I ran the serial example in Arduino, in my computer I found out that it was Example2 instead of Example4. It echos back well based on provided input.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="560" height="315" src="assets/Lab1/serial.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">AnalogRead</div>
+                            <p>I ran the analogRead example in Arduino, and it was Example4 instead of Example2. It was used to the temperature sensor on the board. I works well and displayed the temperature results. When I touched the sensor with hand, the value changed.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="560" height="315" src="assets/Lab1/temp.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">PDM and Additional Work</div>
+                            <p>The Example1_MicrophoneOutput under PDM of Arduino Example was used to test the microphone. When I made sound in different tones, the output would showed the corresponding frequecies.</p>
+                            <p>I added the code below to the function "printLoudest" of the example so that the board would light up the blue LED when A note was played over the speaker, and turn off otherwise.
+                                The frequency of A note was around 440hz. I tested and figured out that the board recognized the 440hz I played as 434hz. Then I switched the condition that LED would be lighted up under 434hz.
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/DkFVIw9afCs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <p>Code:</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="560" height="315" src="assets/Lab1/micro.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                    
                 </div>
             </section>
             <hr class="m-0" />
