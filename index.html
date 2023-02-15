@@ -107,12 +107,130 @@
                     <h2 class="mb-5">Lab2</h2>
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                         <div class="flex-grow-1">
-                            <h3 class="mb-0">University of Colorado Boulder</h3>
-                            <div class="subheading mb-3">Bachelor of Science</div>
-                            <div>Computer Science - Web Development Track</div>
-                            <p>GPA: 3.23</p>
+                            <div class="subheading mb-3">Prelab</div>
+                            <p>The first section of the prelab is to install the python, and I updated my python version to 3.10 which satisfied the requirement. Later I installed the virtual envrionment packages and 
+                                after activate the virtual envrionment, my terminal CLI prompt shows the prefix FastRobots_ble as the figure one below.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/envri.jpg" alt="..." /><figcaption>Figure 1. Virtual Envrionment</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>Then I installed the ArduinoBLE from the library manager in the Arduino IDE. After loading the ble_arduino.ino code into the Artemis board from the codebase, I did not change the baud rate to 
+                                115200 bps at first, and the output was messy characters. Then when I switched to the correct baud rate, the board printed my MAC address in serial monitor as Figure 2.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/ble.jpg" alt="..." /><figcaption>Figure 2. BLE MAC address</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>After printing out my MAC address and generate unique uuid, I updated my MAC address in connection.yaml and replaced BLEService UUID in both the sketch ble_arduino.ino and connections.yaml.
+                                Since my computer is MACOS, I initially did not change the line 53 of base_ble.py from "if IS_ATLEAST_MAC_OS_12:" to "if True". The bluetooth did not work and connection always failed, the error message
+                                showed that it could not find the address. Then I modified the line 53 to "if True" mentioned above, the connection worked quit stable and demo.ipynb notebook could pass the test shown as figure below.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/config_3.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Configuration_1.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Configuration2.jpg" alt="..." /><figcaption>Figure 3. demo.ipynb output</figcaption></span>
                         </div>
-                        <div class="flex-shrink-0"><span class="text-primary">August 2006 - May 2010</span></div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Codebase</div>
+                            <p>In the ble_robot directory, it contains the ble_arduino folder and ble_python folder. The ble_arduino includes c header files and the .ino file which should be uploaded to Artemis board. 
+                                The ble_python primarily includes the demo which is the Jupter Notebook to run command, .yaml file which assigned uuids for bluetooth connections, and cmd_types.py which class involves all the commands.
+                            </p>
+                            <br> <!--New Line-->
+                            <p>For the bluetooth connection, in the computer side, the .yaml file should assign unique uuids for building the connection. And in the arduino side, the .ino file should change to the same uuids as .yaml file
+                                so that the ble could find out and pair the bluetooth connection.
+                            </p>                  
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task One -- ECHO</div>
+                            <p>The first task was to send ECHO command to Artemis board with string message, and my computer received the augmented string back. In my code, I sent a "HiHello" message with ECHO command to Artemis board, and it sent back 
+                                "Robot says -> HiHello" to my computer. The code from computer was as Figure 4 below.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Task1_2.jpg" alt="..." /><figcaption>Figure 4. demo.ipynb code for ECHO</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The following code demonstrated how Artemis board augmented the string "HiHello". Besides the work mentioned before, for each added cases (commands), I should add the command name to the file "cmd_types.py" so that computer could find the commands.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Task1_1.jpg" alt="..." /><figcaption>Figure 5. Arduino code for ECHO</figcaption></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task Two -- GET_TIME_MILLIS</div>
+                            <p>This task I added ono more case in Arduino as Figure 6 below, the function "millis()" would return the runtime in milliseconds of since the board began to run the program. Since the returned type of "millis()" was unsigned long, 
+                                I switched the output type to float.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/task2_code.jpg" alt="..." /><figcaption>Figure 6. Arduino code for GET_TIME_MILLIS</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>Following is the code which sent the command and receive the result of time printed.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/task2_demo.jpg" alt="..." /><figcaption>Figure 7. demo.ipynb code for GET_TIME_MILLIS</figcaption></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task Three -- Notification Handler</div>
+                            <p>This task I called the "ble.start_notify" function to start the notification handler, and there was a "ble.stop_notify" below to stop the handler. The callback function had uuid and bytearray as the 
+                                elements and printed out the time which extracted from the string (bytearray) by function "ble.bytearray_to_float()".
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Task3.jpg" alt="..." /><figcaption>Figure 8. Notification Handler</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>Below video printed the output of notification handler which demonstrated how it received the string value constantly</p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/4j1ymOLxpZI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task Four -- GET_TEMP_5s</div>
+                            <p>In the Artemis board, after receiving the GET_TEMP_5s command, it returned an array of five timestamped internal die temperature readings. The result was in pairs of time and temperature.
+                                Time was got by function "millis()" and die temperature was from function "getTempDecC()". Each second the array will be appended the pair of time and temperature.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Task4_arduino.jpg" alt="..." /><figcaption>Figure 9. Arduino code for GET_TEMP_5s</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The figure below used the notification handler to receive, update, and print the array. And demonstrated the five timestamped readings sent back from Artemis board, one second each.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/Task4_demo.jpg" alt="..." /><figcaption>Figure 10. demo.ipynb for GET_TEMP_5s</figcaption></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task Five -- GET_TEMP_5s_RAPID</div>
+                            <p>The task was similar to task four, but it required to sends as array of five seconds worth of rapidly sampled temperature data, and it should be at least fifty temperatures. Initially, I directly appended 
+                                the temperatures and times in the while loop without clear the arrray everytime, the character size quickly reached the limitation and stopped running. I also added a counter to count how many points were sent.
+                                And the "delay(100)" was added each loop since it was important for the program to run continuously. The arduino code was as Figure 11.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/task5_arduino.jpg" alt="..." /><figcaption>Figure 11. Arduino code for GET_TEMP_5s_RAPID</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>In the computer, I also used the notification handler to get the array updated. The video below could show how the time and temperature updated, and the total count of points was fifty.</p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/3cjnlpwk1yY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task Six -- Limitations</div>
+                            <p>The Artemis board has 384KB of RAM in total, and it should be 384000 bytes after conversion. If each time the data size is 16 bits (2 bytes), and the rate is 150 HZ. 
+                                Based on the calculation, in 5 min we can send (5*60)/(1/150) * 2 = 90000 bytes. To reach the limitation 384000 bytes, 384000 / 90000 = 4.267, 4.267 group of 5 min 
+                                which in total is 1280s. Therefore, 1280 seconds of 16 bits data taken at 150 Hz can be sent without running out of memory. 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">5000-level Task -- Effective Data Rate And Overhead</div>
+                            <p>To test the data rate, I generated a for loop which started at 5 bytes, increased 5 bytes each time, and ended at 125 bytes. The initial time would be reset each loop. For each sent message,
+                                I ran 100 times and calculated the average millisecond it took to increase to correctness. The millisecond for each time was calculated in the notification handler. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/data_rate_demo.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/data_rate_ar.jpg" alt="..." /><figcaption>Figure 11. Data_Rate</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>After getting the times, I plotted the graph below with bytes versus time(s). As shown in the plot, the larger data size required more time to complete.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab2/graph.jpg" alt="..." /><figcaption>Figure 12. Plot</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The larger data size would result in larger data rate. Therefore, the larger packets actually help to reduce overhead, and short packets have more overhead.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">5000-level Task -- Reliability</div>
+                            <p>For testing this section, I added one more for loop to send 300 times data without delay and printed out the actually sending and receiving packets. It perfectly matached that 
+                                the sent count and receive count were both 300. That means, the computer did not miss any data packets from the Artemis board.
+                            </p> 
+                        </div>
                     </div>
                 </div>
             </section>
