@@ -239,7 +239,151 @@
             <section class="resume-section" id="Lab3">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Lab3</h2>
-                    <div class="subheading mb-3">Programming Languages & Tools</div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Prelab</div>
+                            <p>From the datasheet of VL53L1X, the I2C address is 0x52. The two TOF sensors have the same address. To use two sensors simultaneously, one of the TOF sensor should be shut down through 
+                                the XSHUT pin, and change the address of another open sensor programmatically, then turn on the shut down sensor. This process should be repeat every time if want to use two TOF sensors at
+                                the same time. Another way to use 2 ToF sensors is to enable the two sensors separately.
+                            </p>
+                            <br> <!--New Line-->
+                            <p>My plan is to place of the sensor on the front of the robot, and expect to place another at the back. However, the wire probably not long enough, I will place another sensor on the right side.
+                                The scenarios I will miss obstacles are when obstacles are one the left side and very close to robot, or when the robot moves backward. 
+                            </p>
+                            <br> <!--New Line-->
+                            <p>Below is the sketch of my wiring diagram. </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/wiring.jpg" alt="..." /><figcaption>Figure 1. Wiring Diagram</figcaption></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="subheading mb-3">Lab Task</div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">One TOF Sensor Connected</div>
+                            <p>Below is the picture of my ToF sensor connected to my QWIIC breakout board. The XSHUT pins of two sensors were soldered to A2 and A3 in Artemis board. The blue QWIIC cable was connected to SDA, 
+                                and yellow QWIIC cable was connected to SCL. I used the long cables to solder two TOF sensors so that it would have enough space to be placed on robot car.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/one.jpg" alt="..." /><figcaption>Figure 2. One TOF connected</figcaption></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Scan the I2C Channel</div>
+                            <p>It ran the example from Apollo3, the name of the example was Example1_wire_I2C.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/Lab3_4.jpg" alt="..." /><figcaption>Figure 3. I2C Address</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The default address from datasheet is 0x52, but the detected address shown from I2C example was 0x29. The binary address of 0x52 is 0b01010010, and binary address of 0x29 is 0b00101001.
+                                It seems like the LSB of the address has been shifted and results in the 0x29.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Sensor Data with Chosen Mode</div>
+                            <p>In the instruction, it mentioned that there were three distance modes, actually I only found short and long mode in Arduino. My chosen mode was .setDistanceModeShort(), since the longest distance it can detect was 1.3 
+                                meters which was enough for a rotor car. And longer distance required more time to reflect back which was time consuming. In addition, short distance works better for ambient community. The figure below 
+                                demonstrated how to set the distance mode.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/mode.jpg" alt="..." /><figcaption>Figure 4. Code Mode</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>To test the accurancy of my chosen mode, I taped the sensor to the table, and used ruler to measure the distance, then taped at each 10 cm. The longest test distance was 1 meter. This part I cooperated with 
+                            Zhiyuan Zhang, but we tested our sensor seperatly. The picture below showed how we set up to test the distance, and we used the white box as the obstacle.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/test_sensor.jpg" alt="..." /><figcaption>Figure 5. Test Sensot Set Up</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>I tested the distance accurancy for both short and long modes. Based on the readings from distance sensor, I plotted the two lines below. </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/plot.jpg" alt="..." /><figcaption>Figure 6. Plot of Sensor Detection</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The blue line represented the actural distance, the orange line represented the short mode, and the gray line meant the long mode. There were totally 10 points. It can be analyzed that the longer test distance had higher accurancy, and the short mode and 
+                                long mode lines were both closer to the actual one under the envrionment of lab. The worst test point was at distance zero, my sensor could not test it as every time the obstacle closed to the sensor, the output distance was always around 20mm.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">2 ToF sensors</div>
+                            <p>For making two sensors worked at the same time, I soldered the XSHUT pins to A2 and A3 of Artemis board.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/2TOF.jpg" alt="..." /><figcaption>Figure 7. Two TOF Sensors</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>In the arduino code, I defined two pins corresponding to the two XSHUT pins. Then I turned on the sensor one and turned off the sensor two, reset the sensor one address to 0x33 so that two sensors communicated in different addresses.
+                                Then open the sensor two after setting. In the loop part, I added the sensor two to read the distance with sensor one together.
+                            </p>
+                            <br> <!--New Line-->
+                            <p>Below is my code in the setup section.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/2sensor_1.jpg" alt="..." /><figcaption>Figure 8. Two Sensor Setup</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>This is my code in the loop section.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/2sensor_2.jpg" alt="..." /><figcaption>Figure 9. Two Sensor Loop</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The result of two sensors</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/2_test.jpg" alt="..." /><figcaption>Figure 10. Two Sensor Test Result</figcaption></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Tof Sensor Speed</div>
+                            <p>To test the speed of TOF sensors, I used a while loop and the function ".checkForDataReady()" to check if the data of both sensors were ready. Then added two if statements to print out whichever was ready.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/speed_code.jpg" alt="..." /><figcaption>Figure 11. Two Sensor Speed</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>Below was the output of sensor speed. The time interval between detecting same sensors were around 110ms. The speed of loop excecution was 5ms. The current limitation is probably the time to start ranging 
+                                distance and print the value out. The time speed of two sensors are different. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="300" height="150" src="assets/Lab3/speed.jpg" alt="..." /><figcaption>Figure 12. Speed Output</figcaption></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Time vs. Distance</div>
+                            <p>This task is to record time-stamped ToF data, and send to computer through bluetooth. For testing in a convenient way, I added one more header file "TOF.h" which included two functions: one was 'set_up' which initialize and changed the address of sensors, 
+                                another one was 'detect_data' which worked for distance reading for both sensors and appended into an array every time. The code in 'TOF.h' was similar to the one for sensors reading above. One more command names "TOF_TEST" was added for this task in computer side.
+                                Since the time for two sensors to detect distance were different, I chose to included two time. I totally sent the command 20 times which received 20 packages of data. Each package contained the distance read by sensors and the time each sensor finished reading. I splitted
+                                the data into four arrays for plotting.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="350" src="assets/Lab3/time_1.jpg" alt="..." /><figcaption>Figure 13. Time vs. Distance Demo</figcaption></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="350" src="assets/Lab3/time_2.jpg" alt="..." /><figcaption>Figure 14. Time vs. Distance Arduino</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>The plot was sketched based on the sensors' distance and time.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab3/time_dis.jpg" alt="..." /><figcaption>Figure 15. Time vs. Distance Plot</figcaption></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">(5000) Discussion on infrared transmission based sensors</div>
+                            <p>Other than the TOF sensor we use, the Ambient light sensor and Passive Infrared (PIR) sensor are also based on infrared trasmission.</p>
+                            <br> <!--New Line-->
+                            <p>The ambient light sensor is a component of mobile devices which automatically adjusts the brightness based on surrounding light levels. High lightness under low light conditions will hurt our eyes. This sensor helps to prevent eye strain and improve the viewing experience.
+                                It can be automatically controlled depends on the light envrionment. In addition, adjusting the light in different situations can save the energy. However, the accurancy is quite limited. Sometimes the strong light will cause the inaccurancy. And the cost for this sensor is 
+                                high.
+                            </p>
+                            <br> <!--New Line-->
+                            <p>The Passive Infrared (PIR) sensor is to detect heat energy in the surrounding environment. It is effective for motion detection in a wide range of applications. It works by detecting the infrared radiation which is emited by objects with a temperature.
+                                It is designed to detect changes in infrared radiation. It is quite easy to install and does not require any special calibration or adjustment. It also has some limitations. The range for this sensor to detect may not cover enough areas, and it requires multiple sensors to work together. 
+                                The sensitivity of PIR sensor can be affected by environmental factors such as temperature and humidity. 
+                            </p>
+                            <br> <!--New Line-->
+                            <p>The TOF sensor which we use on the Lab, work by emiting a infrared light and measuring the time it takes for the light to reflect off an object. It basically has hign accurancy and range. The long range mode can detect 4 meters furthest. However, it will be affected by 
+                                highly reflective surfaces and results in inaccurancy under these situations.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">(5000) Sensitivity of sensors to colors and textures</div>
+                            <p>For testing the sensitivity of colors and textures, I used the white fabric and black notebook cover as the obstablcs to test the distance reading seperatly. The default distance I set to test was 200mm.
+                                The black notebook cover can be reflected under light.
+                            </p>
+                            <br> <!--New Line-->
+                            <p>Below is the result for white fabric.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="300" height="150" src="assets/Lab3/white.jpg" alt="..." /><figcaption>Figure 14. Time vs. Distance Arduino</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>Below is the result for black notebook cover.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="300" height="150" src="assets/Lab3/black.jpg" alt="..." /><figcaption>Figure 14. Time vs. Distance Arduino</figcaption></span>
+                            <br> <!--New Line-->
+                            <p>From the result above, the distance was quite accurant for white fabric, since the color and texture did not reflect any light. And the result was very stable. However, the black notebook cover could 
+                                reflect the light in my room which affected the sensor detection. The error range was around 36mm. Therefore, the TOF sensor is sensitive to different colors and textures.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
             <hr class="m-0" />
