@@ -391,8 +391,121 @@
             <section class="resume-section" id="Lab4">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Lab4</h2>
-                    <p>Apart from being a web developer, I enjoy most of my time being outdoors. In the winter, I am an avid skier and novice ice climber. During the warmer months here in Colorado, I enjoy mountain biking, free climbing, and kayaking.</p>
-                    <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technology advancements in the front-end web development world.</p>
+                    <p>The purpose of this Lab is to connect the IMU to the Artemis board using the QWIIC connectors for detecting the data of pitch, yaw, and roll. Finally, we will run the RC car with Artemis board attached 
+                        and record the raw data.
+                    </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Set up the IMU</div>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab4/set_up.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The picture above is the setup and conncection of IMU to Artemis board through QWIIC connectors. To test the work of IMU, the Example1_Basic code was ran and the output as below. When I rotated the IMU 
+                                in different directions, the corresponding value (roll, pitch, yaw) were changed for both accelerometer and gyroscope. The accelerometer is the linear change, and gyroscope is the angular change.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="800" height="600" src="assets/Lab4/example.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The definition of AD0_VAL is that the default value is 1, and when the ADR jumper is closed the value becomes 0. After checking the datasheet of IMU, the AD0_VAL represents the last bit of slave address.
+                                It can be used if there are two IMU connected, one of AD0_VAL is 1 and another one is 0 so that they can have different I2C address.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Accelerometer</div>
+                            <p>The euqation of calculating pitch and roll from lecture is shown as below picture.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/equa_lec.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>And in arduino code, the equation was implemented as below.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab4/euqa_ar.jpg" alt="..." /></span>
+                            <p>The video demosntrated the output at {-90, 0, 90} degrees for pitch and roll. The blue line represented the pitch, and the orange line was the 
+                                roll. 
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/mkdJbg7MsSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p>From the test result, there was a lot of noisy contained in the wave. The error range of pitch and roll was about 2 degrees. The noisy would be larger if the sensor was put on the RC car. To reduce the noisy of the data,
+                                I followed the provided tutorial to analyze the data used FFT. The data was sent from Artemis to computer, and below are the figures of time domain and frequency domain. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1000" height="800" src="assets/Lab4/pitch_acc.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1000" height="800" src="assets/Lab4/roll.acc.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>I collected 10 seconds' data and the sample frequency was set to 50. From the comparison of time domain and frequency domain, as we can see, there was no significant change after the first spike. There was some little noise contained.
+                                After checking out the information in datasheet, the IMU includes low pass filter response which minimum is 5.7Hz, which would be possible to affect the little noise.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Gyroscope</div>
+                            <p>The equations of computing gyroscope are as below. </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/gyro_equ.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Same as accelerometer, I also tested the pitch, roll, and yaw in [90, 0, -90] (blue = pitch, red = roll, greeb = yaw). The output reflected that the error of calculating gyroscope was very large, the maximum error could reach 45. The accelerometer
+                                has acceptable error range, but the gyroscope's error could be larger and larger as the time goes. 
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/ZRyCYu4cpGY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p>To demonstrate how the sample frequency affect the accurancy of detecting angles, the delay time was adjusted. The delay time should be 10ms for 100Hz, and 100ms for 10Hz. The first figure below was 10Hz, and the second figure was set to 100 Hz. As shown 
+                                in the figures, the noise decreased while detecting, but the accurancy was still bad. While putting the IMU at table without moving, the data drifted further from 0, and experimenced quick vibrations when rotated.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/gyr_10.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/gyr_100.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p> For computing an stable and accurate estimate of pitch and roll, complimentary filter was applied to improve it. The complimentary filter equation from lecture was posted below. It is basically the combination of accelerometer results and gyroscope results. The alpha is the weight to determine which result should take more porpotion. To compute the most accurate and stable 
+                                data, the alpha here should be 0.1 which means the gyroscope data has more weight.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/gyr_filter.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The output of complimentary filter is as below. The blue line was pitch and the red line was roll. The accurancy was a lot higher and the error was smaller than 1 which was a acceptable range. The working range was -180 to 180. And the data did not drift and experimenced quick vibration while moving quickly</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab4/after_filter.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Sample Data</div>
+                            <p>The first task of sampling the data was to speed up the execution. For speeding it, I deleted all the serial.print to avoid any source of delay. After getting rid of all of the delays, new values could be sampled in an average of 27 ms. </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/speedup.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The time-stamped data for IMU included the accelerometer pitch and roll, and complimentary filter of gyroscope pitch and roll, and also the time to receive all the data. </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/time_stamp.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Finally I integrated the data of IMU and TOF together. All the data were stored in an array each loop, and then sent to my computer using Bluetooth through BLE. I chose to put all of them in a big array instead of seperate array since the memory was enough to hold them. Below video demonstrated 5s of ToF and IMU data sent over Bluetooth. Since there were more data to be packed and sent, 
+                                it took more time for Artemis to wait for the value ready. 
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/wSblaofSrL0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Cut the Coord</div>
+                            <p>In this task, the battery would be replaced the USB C cable to power the Artemis. The 3.7V 650mAh was used to connect the Artemis board, and the 3.7V 850mAh one was connected to power the RC car since it took more energy. 
+                                I soldered the cables from 650mAh battery to the JST connector, and carefully made sure that the red soldered to red, and ground connected to ground. After soldering, the battery was plugged into the Artemis board and it light up.
+                                The bluetooth still worked well after testing.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/connect.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Record a Stunt</div>
+                            <p>The video below I tried to play the car without Artemis: </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/yoiJjjozLxU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p>This is the video that RC car with Artemis: </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/qJn2VaZgHV0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p>I ran the data for 10 seconds and got approximatly 90 data points. Below are the plot data sent over Bluetooth. I tried to filp it but did not success.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/TOF.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/Acc.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="320" src="assets/Lab4/GRY.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
                 </div>
             </section>
             <hr class="m-0" />
