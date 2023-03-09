@@ -513,12 +513,116 @@
             <section class="resume-section" id="Lab5">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Lab5</h2>
-                    <ul class="fa-ul mb-0">
-                        <li>
-                            <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                            Google Analytics Certified Developer
-                        </li>
-                    </ul>
+                    <p>The purpose of this Lab is to change from manual to open loop control of the car. At the end of lab, the car can be controlled by Artemis board and two motor drivers through coding.
+                    </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Prelab</div>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab5/dia.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The diagramm above demonstrates my connections between Artemis, two motor drivers, and 850 mAh battery. The inputs and outputs of both motors are hooked up in parallel. The left 
+                                motor driver was soldered to pin A14 and A15, and the right one was connected to pin 4 and A5 as the figure. The power and ground of two motors were also parallel and finally connected 
+                                to 850 mAh battry.
+                            </p>
+                            <br> <!--New Line-->
+                            <p>Battery Discussion: the artemis and motor drivers are using seperate batteries since there are to motor drivers connected in parallel to run the car by using only one battery. Therefore, the 
+                                Artemis board uses less power and current compared to motors to work.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Motor Driver Test</div>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/connect.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The picture above demonstrates my setup with power supply and oscilloscope hookup to test the PWM with left motor AOUT1 and BOUT1. The power supply I set to 3.7V since the motor would finally connected to the 850 mAh battery which is also 3.7V. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/pwm.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/test_motor.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The PWM waveform showed that my motor performed well. I set both pin 14 and 15 as output mode, and tested both pin seperatly with 100 using "analogWrite" (which duty cycle is 100/255 = 39.2%). The value could be in the range of 0 to 255.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Single Wheels Spinning</div>
+                            <p>After testing both motors working, I took the blue shell of the car off and cut off the build-in PCB board and connected LEDs. I soldered both of the motors to the motor drivers, and also connected the power to the battery side. It was silly actually since
+                                I should test step by step. But luckily...it works. I used the code below to run the motor in different directions for 2 seconds everytime, and stop one second, the power was ran by battery. The spinning result is demonstrated as the video attached.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/oneside_wheel.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/bx_t8TbMnM8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Both Wheels Spinning</div>
+                            <p>After making sure each side of the car could spin seperately through the test code above, I used the code below to running the both wheels together. The code were similar to above which only added pin 4 and pin A5, and made sure that both wheels ran in the same 
+                                directions each time. The car was powered by battery.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/twoside_wheel.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/tRx8eX7wTGs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">All Components on Car</div>
+                            <p>The figure below demonstrates how all components settled in car.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="500" src="assets/Lab5/whole.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Lower Limit PWM Value Discussion</div>
+                            <p>I tested the PWM value since 30, which my hypothesis was it should be able to run the car. But actually, my motor did not move. Then I switched it to 40, the motors started moving 
+                                when I hold it, but because of the friction between tile and car, it needed more power to move. After several tests, I figured out that the lower limit PWM value of my car to go forward 
+                                was 50. It could be different if the car was run on other types of ground. 
+                            </p>
+                            <br> <!--New Line-->
+                            <p>The lower limit in PWM value for on-axis turns was higher since the wheel experience more friction to make a turn. The limit value was 80. 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Calibration demonstration</div>
+                            <p>Ideally, the both motors' power should be the same. But after testing, the direction of car significantly drove to the left. It means that the right motot has more power under same PWM value.
+                                 After multiple running, the calibration factor was 0.6 as the code below. The video attached demonstrates the car going straight with at least 2 meters.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/cali.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/92A0Mzb_Es4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">open Loop Control</div>
+                            <p>Following code and video shows the open loop control. I did a straightly moving forward first for 5 seconds, and then turn right, turn left, and finally did the backward for 5 seconds. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="400" src="assets/Lab5/open_loop.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/f5RCGv39KKk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">5000 Level Task</div>
+                            <p>Task one: From the screenshot before, the frequecy it generated was 182 Hz. I think the frequency is fast enough for this motors since other sensors also need time to do the detections.
+                                And if we manually configure the timers to generate a faster PWM signal, the motor would run faster and it would be benifical in running somewhere hard to run.
+                            </p>
+                            <p>Task Two: Since the friction is large and different in different places, I set the PWM value to 60 initially to run the car continuously. And then since the limit PWM tested above was 50, I initially set the second 
+                                PWM to 40 which works well. After several experience, I found that the minimum PWM to run the car in motion was 35. 
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/F4izXOL3dv4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
