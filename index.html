@@ -31,6 +31,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab3">Lab3</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab4">Lab4</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab5">Lab5</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab6">Lab6</a></li>
                 </ul>
             </div>
         </nav>
@@ -621,6 +622,86 @@
                                 PWM to 40 which works well. After several experience, I found that the minimum PWM to run the car in motion was 35. 
                             </p>
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/F4izXOL3dv4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- Lab6-->
+            <section class="resume-section" id="Lab6">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab6</h2>
+                    <p>The purpose of this Lab is to get a hand-in experience in implementing the PID control. 
+                    </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Prelab</div>
+                            <p> The bluetooth setup by using BLE was same as the lab before. The first thing I did was to build the connection between computer and Artemis board, therefore I 
+                                created two more cases at BLEArduino.ino. One case was for start the PID control of robot car, and another case was used to stop the car after PID control and 
+                                send all the data including motor input, TOF distance, and corresponding time to the computer. I defined three arrays seperatly to store these data, and finally 
+                                use a for loop to package data together as the time-stamp we did in before labs and send back to computer. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab6/BLE_2.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Then inside the demo.ipynb, I raised a notification handler to receive the data send from the Arduino side. The "pid_data" string contanined the three values stated 
+                                above and seperate by space. Later on I will define arrays to store these datas for ploting. The Start_PID command will be ran first to start implementing the PID and 
+                                collect data, then stop_PID will be sent to stop the process and get the data just collected. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="420" src="assets/Lab6/BLE_1.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">P/I/D discussion</div>
+                            <p> In the lab task, I set a certain distance as the goal to implement the PID control. The error was the difference between the measured distance and set distance. The mainly
+                                parameters of PID control are Kp, Ki, Kd. The Kp controls how quickly to turn the steering while heading to the set point. Ki adds more steering action to make it stable. And 
+                                Kd can be used to limit the speed and avoid oscillation. For choosing the parameters, I started test from only set Kp which gradually increased from 0. After the car reacted 
+                                fast and ran toward the wall, I started adding the Ki which lower the speed but increase the stability of control. I added the Kd last when the car started oscillating around
+                                the set goal to reduce the oscillation. The Kp = 0.1, Ki = 0.01, Kp = 51. Too much integral can be lead to shaking, so the Ki much smaller than Kp.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Range/Sampling time discussion</div>
+                            <p> The time interval of TOF sensor detection was around 110 ms. It was quit enough for the PID control to response and updated the new value from tested distance data. However, the 
+                                TOF sensor was not very accurate. There were some deviations. I set the goal as 400mm, and when I tested the distance detected by sensor, it can be ranged from around 396 ~ 404mm, 
+                                and it kept floating. Therefore, I set to allow that deviation of 5, which means from 395 to 405 were both considered as 400 mm. In addition, to avoid the car running too fast, the 
+                                upper bond of PID calculated value ut was limited to 140, and the lower bond was 55 so that it could move at lowest speed.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Task A</div>
+                            <p> After calculating the integral, error, and deriviation, the equation of pid was as below:</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="400" height="200" src="assets/Lab6/pid.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p> The car moving was based on the calculated ut, which was also the pwm of motors.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="400" height="200" src="assets/Lab6/ut.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p> The distance detected by tof, the pwm value(ut), and corresponding time are all stored in arrays. If the size of array was full, it would stop storing to avoid any errors.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="400" height="200" src="assets/Lab6/ut.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The video below showed that the robot car successfully implemented the PID control which stopped at 400 mm away from the sponge wall.</p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/R8taNZhIfRY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <p>Below is the graph of motor input versus time. After the car adjusting the position, the pwm tended to be stable at around 20 since the distance error was inside the deviation which should stop the car.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab6/pwm.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Following figure is the TOF distance versus time. The distance started from a large value since the car was away from the wall, and tended to be stable at about 400 mm.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab6/TOF.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Wind-up implementation and discussion</div>
+                            <p> To avoid the integrator windup, a limition was set to the calculated integral to avoid it became too large or too slow. The integrator windup would result in an overshoot in PID controller if the large error remained long and the 
+                                sum of integral became too large to exceed the limitation of pwm. If the floor surface has small friction which is hard for car to run, the large error would keep very long and the pwm would have the risk to over the rang within 
+                                0 - 255. In my code, I have setup the limitation for pwm which also avoid these issue. 
+                            </p>
                         </div>
                     </div>
                 </div>
