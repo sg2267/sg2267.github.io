@@ -32,6 +32,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab4">Lab4</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab5">Lab5</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab6">Lab6</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab7">Lab7</a></li>
                 </ul>
             </div>
         </nav>
@@ -702,6 +703,125 @@
                                 sum of integral became too large to exceed the limitation of pwm. If the floor surface has small friction which is hard for car to run, the large error would keep very long and the pwm would have the risk to over the rang within 
                                 0 - 255. In my code, I have setup the limitation for pwm which also avoid these issue. 
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- Lab7-->
+            <section class="resume-section" id="Lab7">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab7</h2>
+                    <p>The purpose of this Lab is to implement the Kalman Filter. It will help to improve the executation of Lab6 and make it faster. The Kalman Filter can supplyment the slowly sampled Tof data, it allows the 
+                        car run towards to the wall as fast as possible. </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Estimate drag and momentum</div>
+                            <p> For implementing the Kalman Filter, the first step was to estimate the drag(d) and momentum(m). The equation we calculate as follow: </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="100" height="50" src="assets/Lab7/d_equ.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="200" height="100" src="assets/Lab7/m_equ.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>To get the value, I drove the car towards a wall while logging motor input values and ToF sensor output. The PWM value I chose was 120 from previous lab. Then I used the time and detected distance 
+                                to find out the steady state velocity and 90% rising time which are required to calculte the drag and momentum. Graphs below demonstrated the car ran towards the wall. To avoid crush, I used a active 
+                                break to stop the car 100mm before wall to avoid hard crush. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab7/tof.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab7/pwm.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab7/velocity.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>From the detected data, I figured out the the steady state velocity shoule be 2000mm/s, and at here the u was 1. Therefore, d was 1/2000 which was 0.0005. The total rising time was about 2.9s, so the 90% 
+                                rising time would be 2.6s from my graph. Then I got my momentum which m = 0.000564. Later on I used the drag and momentum value to output the matrices A and B, based on the formula below, 
+                            </p>
+                            <head>
+                                <meta charset="utf-8">
+                                <meta name="viewport" content="width=device-width">
+                                <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+                                <script id="MathJax-script" async
+                                        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+                                </script>
+                            </head>
+                            <body>
+                                <p> 
+                                    $$A = 
+                                    \begin{bmatrix}
+                                    0 & 1\\
+                                    0 & -\frac{d}{m}\\
+                                    \end{bmatrix}
+                                    =
+                                    \begin{bmatrix}
+                                    0 & 1\\
+                                    0 & -0.89\\
+                                    \end{bmatrix}
+                                    $$
+                                </p>
+                                <p>
+                                    $$B = 
+                                    \begin{bmatrix}
+                                      0\\
+                                      \frac{1}{m}\\
+                                    \end{bmatrix}
+                                    =
+                                    \begin{bmatrix}
+                                      0\\
+                                      1773\\
+                                    \end{bmatrix}
+                                    $$
+                                  </p>
+                            </body>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Initialize KF and Test KF</div>
+                            <p> From the founded A and B above, I could apply the following equation to discretize my matrices. The delta t was the difference between two continuously recorded time. The C matrix directly 
+                                equals to [-1, 0].
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="400" height="200" src="assets/Lab7/ad_bd.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The Kalman Filter also required the measurement noise and process noise covariance matrices.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="400" height="200" src="assets/Lab7/noise_equ.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>As for the three ballpark values in the matrices, I directly tried the value from lecture first. After adjusting, my value were as below:</p>
+                            <head>
+                                <meta charset="utf-8">
+                                <meta name="viewport" content="width=device-width">
+                                <title>MathJax example</title>
+                                <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+                                <script id="MathJax-script" async
+                                        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+                                </script>
+                              </head>
+                              <body>
+                              <p>                        
+                                $$\sigma_1 = 27.7$$ $$\sigma_2 = 27.7$$ $$\sigma_3 = 5$$
+                              </p>
+                              </body>
+                            
+                            <p>After computing all the needed value and matrices, the last step was to combine them together for the Kalman Filter. Following was my code in python
+                                to test the filter in Jupyter. To run the KF, the input values u and y were the pwm motor value and sensor detected distance. I created another array to store
+                                the predicted distance value after filter. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="800" height="600" src="assets/Lab7/kf_python.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Below was the graph of detected tof sensor data and Kalman Filter value. It was demonstrated that the predicted value was quite match with the detected data.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="400" src="assets/Lab7/kf.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Implement the Kalman Filter on the Robot</div>
+                            <p> After multiple testing and determining that the Kalman Filter works as expected in Jupyter, I integrated the Kalman Filter into Lab 6 PID controllor on the Artemis.
+                                Following was my code in arduino which moved the KF from python to C. It was a little bit complicated compared to implement the filter in Jupter Lab. The PID value 
+                                was same as Lab6, and instead of directly use the detected distance to compute the error, I used the Kalman Filter. However, I found that the car was sighly oscillated
+                                after reaching the set distance goal (400mm), I chose to change to trust and use the sensor value if the error was lower than 30.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="680" height="400" src="assets/Lab7/kf_arduino.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Below was the graph of Kalman Filter and tof data, and the video of car running. The car backward was affected by the friction between floor and wheels.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="800" height="600" src="assets/Lab7/KF_on_robot.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <iframe width="680" height="400" src="https://www.youtube.com/embed/tmtyQeeG5yw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
