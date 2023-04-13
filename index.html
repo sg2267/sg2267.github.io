@@ -33,6 +33,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab5">Lab5</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab6">Lab6</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab7">Lab7</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab8">Lab8</a></li>
                 </ul>
             </div>
         </nav>
@@ -822,6 +823,44 @@
                             <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="800" height="600" src="assets/Lab7/KF_on_robot.jpg" alt="..." /></span>
                             <br> <!--New Line-->
                             <iframe width="680" height="400" src="https://www.youtube.com/embed/tmtyQeeG5yw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>  
+            </section>
+            <hr class="m-0" />
+            <!-- Lab8-->
+            <section class="resume-section" id="Lab8">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab8</h2>
+                    <p>The purpose of this Lab is to combine what I did in previous labs and complete a fast stunt. In this task, I will chose the first task which is the position control. The target is to
+                        flip the car at provided sticky matt with a center located 0.5m from the wall, and then drive back in the direction from which it came.
+                    </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Position Control</div>
+                            <p> Since to flip the car successfully, the car should be set as fast as possible running toward the wall without slowing down. The PID control I did in Lab6 should be disengaged here. 
+                                Initially, I tried to use the Kalman Filter from lab 7 with the same calculated parameters as the prediction distance value to detect when to do the flip. However, the Kalman filter
+                                was not working here, the output of Kalman filter was vibrating from positive to negative, which made the car moved very slow with shaking forward and backward. I tried to recalculate
+                                the parameter of drag and momentum, but the issue was still not solved. The Kalman filter worked well in last lab, and the estimation line was quite close to the detected distance, but
+                                it worked wired here. Therefore, instead of using Kalman filter, I switched to use the distance detected by sensor directly. 
+                            </p>
+                            <br> <!--New Line-->
+                            <p> For doing the flip, I set the car to run at 255 PWM and changed to backward at 255 when the car approaching to the wall, delayed for around 0.5 second to complete the flip and thenn drive
+                                back to start line at 150 pwm. I first set the car to do a flip when the sensor detected 0.5m from the wall. Then I figured out that the speed of car was too fast, when the sensor detected 
+                                0.5m and backward, the inertia would make the car hit the wall which failed in fliping. Then I did the calibration which have the car backward(flip) at 1.1 meters. It worked quite well to 
+                                do the flip. But the car did not go straight when the speed was high, even it could move straightly in previous labs with low speed. I calibrated the speed one more time to make sure it wouldn't 
+                                drive to the outside of matt. The following was the code in Arduino for flipping:
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab8/code.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The three videos demonstrate that my stunt works are at below:</p>
+                            <iframe width="350" height="680" src="https://www.youtube.com/embed/vsbrnZseKGM" title="ECE5160_Lab8_video1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <iframe width="350" height="680" src="https://www.youtube.com/embed/WzoLFNUy4HA" title="ECE5160_Lab8_video2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <iframe width="350" height="680" src="https://www.youtube.com/embed/eqX_6A8RR-4" title="ECE5160_Lab8_video3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <p>The pwm for my car is continuously 255 at beginning, and change to -255 later, then become -150 until passed the line. The distance value would be change from 3 meters, and stop at around 0.5 meters
+                                since I stopped recording the data when it started to flip. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab8/plot.jpg" alt="..." /></span>
                         </div>
                     </div>
                 </div>
