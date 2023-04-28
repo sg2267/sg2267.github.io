@@ -35,6 +35,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab7">Lab7</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab8">Lab8</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab9">Lab9</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab10">Lab10</a></li>
                 </ul>
             </div>
         </nav>
@@ -935,6 +936,97 @@
                             </p>
                             <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/wall.jpg" alt="..." /></span>
                             <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/line.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- La9-->
+            <section class="resume-section" id="Lab10">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab10</h2>
+                    <p> In this lab, we are going to implement grid localization using Bayes filter in a simulation environment in python. Below is a visualization of bayes filter which has three layers represented x, y, and 
+                        theta. 
+                    </p>
+                    <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="700" height="500" src="assets/Lab10/Bayes.jpg" alt="..." /></span>
+                    <br> <!--New Line-->
+                    <p> The algorithm below for implementing the bayes filter will be used in most of the works at this lab: 
+                    </p>
+                    <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="700" height="500" src="assets/Lab10/bayes_func.jpg" alt="..." /></span>
+                    <br> <!--New Line-->
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Compute Control</div>
+                            <p> This function takes the current and pase odometry poses as the input to calculate the information for the first rotation, translation, and second rotation which are required for getting the robot 
+                                from previous pose to the current pose. Moreover, the figure below descrips the computation:
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab10/figure.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>I simply used the trignometry and Pythagorean Theorem to do the calculation.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1100" height="900" src="assets/Lab10/control.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Odom Motion Model</div>
+                            <p> The odom_motion_model function takes the current pose, previous pose, and the control input (u) as inputs. It computes and returns the probability of the robot moves to the current pose. In the
+                                implementation, I first got the initial rotation, translation, and second rotation from compute_control function stated above. Then apply the gaussian distribution to model the measurement noise. It 
+                                helps to compare between the pass control unit and actual control unit, and evaluate the probability of the robot transit from previous pose to the current pose.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1100" height="900" src="assets/Lab10/odom.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Prediction Step</div>
+                            <p> The next step is to implement the prediction_step function which is this part of bayes filter:
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab10/prediction_algo.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p> This function takes the current odometry data and previous odometry data as input to update the bel_bar matrix with the marginal probability distribution. The calculation only considers the odometry values 
+                                without any sensor measurements. It is complicated which contains 6 nested for loop since there are three dimensions for previous and current. To optimize it and speed up the calculation, there is one if statement 
+                                added after three nested loop to check if it is worth to continue computing. If the values are lower than 0.0001, then it is not valuable to keep calculating.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1100" height="900" src="assets/Lab10/prediction.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Sensor Model</div>
+                            <p> At this step, we are going to have the sensor measurements included in our function. The output is an array stores the value of p(z|x) for each 18 sensor readings. We still use the gaussian distribution here to 
+                                model noise to see the correlation between sensor measured datas and the actual values at current pose. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1100" height="900" src="assets/Lab10/sensor.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Update Step</div>
+                            <p> Finally we implemented the update_step function which is correlated to the portion of bayes filter:
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab10/update_algo.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The final probabilities stored in the bel are primarily based on the bel_bar from prediction step and the result of sensor model. At the last for loop, I used the get_view 
+                                function to get the actual sensor measurements for sensor model first, then simply update the bel matrix. I also normalized the probabilities at very last. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="900" height="700" src="assets/Lab10/update.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Run Bayes Filter</div>
+                            <p> After completing all the code, I ran the Bayes filter. Following I recorded the videos of demonstration of trajectory plotter with and without the grid. 
+                                The green line represents the ground truth, the blue line is the belief, and the red line stands for odom. It can be demonstrated that the blue line(belief) 
+                                is quite close to the green one (ground truth), and the odom is very frustrated. For the second video with whith boxes, the whiter means the greater probability to move.
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/QBFyDx7J8yI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/Ef5Cy7eqk3Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
