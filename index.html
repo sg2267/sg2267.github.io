@@ -36,6 +36,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab8">Lab8</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab9">Lab9</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab10">Lab10</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab11">Lab11</a></li>
                 </ul>
             </div>
         </nav>
@@ -941,7 +942,7 @@
                 </div>
             </section>
             <hr class="m-0" />
-            <!-- La9-->
+            <!-- Lab10-->
             <section class="resume-section" id="Lab10">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Lab10</h2>
@@ -1027,6 +1028,89 @@
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/QBFyDx7J8yI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                             <br> <!--New Line-->
                             <iframe width="560" height="315" src="https://www.youtube.com/embed/Ef5Cy7eqk3Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- Lab11-->
+            <section class="resume-section" id="Lab11">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab11</h2>
+                    <p> In the last lab, we have done the localization in the simulation at python. The main purpose of this lab is to appreciate the difference between simulation and real-world systems. We will use Bayes filter to perform localization 
+                        on actual robot. We will use the Tof sensor to detect distance per 20 degree, collect 18 data points in total to help update step.
+                    </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Test Localization in Simulation</div>
+                            <p> To make sure the simulator works well, after running the given lab11 code lab11_sim.ipynb, I got the following given plot:
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab11/test.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The green one represented the ground truth, the blue line was the belief, and the red one was the odom. As shown in the figure, the Bayes filter worked well. </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Perform Observation Loop 1</div>
+                            <p> After testing the given code, the next step was to complete the perform_observation_loop function in lab11_real.ipynb. I added one more notification handler to receive the distance data and degrees from 
+                                Artemis, and then send the command to the robot to rotate 360 degrees and collect 18 data points by Tof sensor. To implement this function, a time await should be added to function so that the robot could 
+                                have enough time to finish the rotation. I first tried to add the "await" and "async" keywords to needed function definitions as stated in instruction, but it occured an issue which was difficult for me to
+                                resolve. Then I switched to an alternative way which directly called the asyncio sleep coroutine as asyncio.run(asyncio.sleep(25)) inside the perform_observation_loop() function, and it worked pretty well after
+                                trying multiple runs. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="1100" height="900" src="assets/Lab11/perform.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Perform Observation Loop 2</div>
+                            <p> As mentioned before, it required the robot to rotate a circle and collect 18 distance data points. The part of code was similar to Lab9, but I set the limitation to only gather 18 data points. I expected to have
+                                the Tof sensor to record the distance data per 20 degrees. Howeever, I figured out that there was a small delay every time detected the 20 degrees, which resulted in rotating the robot car over 360 degrees. Therefore,
+                                I reduced to detect distance at each 18 degrees to allow any over-rotated. After testing, it worked well everytime.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab11/real.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Rotation Test</div>
+                            <p> After completing above code, the next step was to test the rotation. Following video demonstrated how my robot car rotate and collect data. It would stop every time to collect data. 
+                            </p>
+                            <iframe width="650" height="400" src="https://www.youtube.com/embed/d9Z2h2wBVhM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Result</div>
+                            <p> Finally, after testing, I ran the observation loop at the four points of map. The first one was at point (-3,-2). The result was attached below. I added the ground truth to compare with the belif and added the grid to make it more 
+                                visualized. The localization of point (-3, -2) was perfectly match with ground truth.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab11/(-3-2)_beli.jpg" alt="..." /><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab11/(-3-2)_grid.jpg" alt="..." style="float:right" /></span>
+                            <br> <!--New Line-->
+                            <p> Then the image below was at point (5, -3). This point also worked well as shown in grid, and perfectly covered the ground truth. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab11/(5-3)_beli.jpg" alt="..." /><img class="img-fluid mx-auto mb-2" width="480" height="280" src="assets/Lab11/(5-3)_grid.jpg" alt="..." style="float:right" /></span>
+                            <br> <!--New Line-->
+                            <p> Following was for (0, 3). I ran three times at this point since the first run was very drift. But the last two runs both correctly matched with ground truth. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab11/(03)_beli.jpg" alt="..." /><img class="img-fluid mx-auto mb-2" width="480" height="280" src="assets/Lab11/(03)_grid.jpg" alt="..." style="float:right" /></span>
+                            <br> <!--New Line-->
+                            <p> The last point here was (5, 3). It was a little off the ground truth. (green point is ground truth, blue one is the belief)
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab11/(53)_point.jpg" alt="..." /><img class="img-fluid mx-auto mb-2" width="520" height="320" src="assets/Lab11/(53)_grid.jpg" alt="..." style="float:right" /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Discussion</div>
+                            <p> From the results above, the points (-3, -2), (5, -3), (0, 3) were localized well compared to ground truth. But the (5, 3) was a little off, and the result was the best after running multiple times. I think the reason was due to the symmetry of environment and make the robot 
+                                get confused. And my Tof sensor's detection also not that correct.
+                            </p>
                         </div>
                     </div>
                 </div>
