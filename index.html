@@ -37,6 +37,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab9">Lab9</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab10">Lab10</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab11">Lab11</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Lab12">Lab12</a></li>
                 </ul>
             </div>
         </nav>
@@ -1111,6 +1112,134 @@
                             <p> From the results above, the points (-3, -2), (5, -3), (0, 3) were localized well compared to ground truth. But the (5, 3) was a little off, and the result was the best after running multiple times. I think the reason was due to the symmetry of environment and make the robot 
                                 get confused. And my Tof sensor's detection also not that correct.
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- La9-->
+            <section class="resume-section" id="Lab9">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab9</h2>
+                    <p> In this lab, we aim to map out a static room, and this map will be used in later localization and navigation labs. For building the map, 
+                        we should place our robot car in a couple of marked up locations around the lab, and have it spin around its axis while collecting ToF readings. All the 
+                        recorded data in different locations will be combined together, and use the transformation matrices to plot points and draw up the map using straight line segments.
+                    </p>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Angular speed control</div>
+                            <p>In this lab, I chose to use the angular speed control with a average speed 20 degreed per second. The PID control will manage the pwm(speed of motor) to be slower or 
+                                faster to maintain the rotation speed at 25 degrees / second. The basic setup for IMU was based on what we did in Lab 4 before. The first step was to spin the car slowly
+                                on axis. It took a long time for me since I figured out that the friction of different tiles and batteries affecting a lot. The same pwm value will result in different output
+                                in most of the time. I finally chose to set the initial speed as 120, and the KP as 0.05. The following code demonstrates the PID control: 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="700" height="500" src="assets/Lab9/code.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>The following video and figures demonstrate the robot car spinning on axis:</p>
+                            <iframe width="650" height="400" src="https://www.youtube.com/embed/Pb2idogig8w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="700" height="500" src="assets/Lab9/plot.jpg" alt="..." /></span>
+                            <p>From the video, it shows that my car drove slowly on-axis but somewhat frustrated. I hope it could run stable, however, after I had tried multiple times with different speed and charged all the 
+                                batteries, it was one of the best status. The angular speed I set was 25 degrees per second. The measured speed was quite frustrated, but the average was around 25 degree. My motor speed change slightly
+                                which it ranged from 116 - 120, it can be included that the cat motor worked stable, so the frustration of car was probably because of the friction varied between tile and wheels. The total time to spin 360
+                                degree was around 14 seconds, which means the average angular speed was close to 25 degrees per second. 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Read out Distances</div>
+                            <p> There are totally five marked positions in the lab that we can do the map. For each position, I spinned the car in 360 degrees and have the tof sensor to record the data. To make sure the data was reliable, I ran 
+                                at least twice at each location to find out the most fit one. It was not accurate at first since the detections by sensors were not correct, it would occur some strikes. After multiple trying and reconnected the sensor,
+                                it worked better to record the map data. Below are the five polar coordinate plots:
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/0_0.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/-3_2.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/0_3.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/5_2.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/5_3.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Merge and Plot your readings</div>
+                            <p> After I got all the data points from each coordinate, I computed the transformation matrices and convert the distance value detected by tof sensor to the inertial reference frame of the room. The equation to convert each
+                                data value to x and y value as below. All distance data from five positions would be converted as coordinates to be plotted. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/matrix.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Since each spin was done in different positions of the map, I should calibrate the points to add up the coordinate values to data with the conversion conversion 1 foot = 304.8 mm. After converting all points into array, I plotted
+                                them as below where different colors represented the which coordinate it performed the spin. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/scatter.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Convert to Line-Based Map</div>
+                            <p> After drawing all the scatter points on the map, I manually estimated where the actual walls were and plot the lines. I also showed the lists containing the end points of these lines. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/wall.jpg" alt="..." /></span>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="450" height="250" src="assets/Lab9/line.jpg" alt="..." /></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- Lab12-->
+            <section class="resume-section" id="Lab12">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Lab12</h2>
+                    <p> This is the final lab which the goal is to have the robot navigate through a set of waypoints in that environment as quickly and accurately as possible. Below is the waypoints for the car to 
+                        move in the map:
+                    </p>
+                    <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab12/point.jpg" alt="..." /></span>
+                    <br> <!--New Line-->
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Method</div>
+                            <p> Initially, I expected to the the robot car to do localization at each point to determine its position, and calculated the distance and angle for the next waypoint, then direct the car to move.
+                                I have tried that at first, but the acutal test was terrible. And since I was running out of time due to other finals, I switched to use PID control for distance running and open loop control 
+                                for the angle it turned. I also applied the Pythagorean theorem equation here for my code to calculated the distance between two waypoints, and got the destinated distance for PID control. The
+                                following figure drew out the track of the car moving.
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="650" height="450" src="assets/Lab12/figure.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Code</div>
+                            <p> For implement it, I simply added one more case to my Arduino, and it would rise the flag of "run_path" to be true so that the loop section below could run the path. I manually wrote the waypoints
+                                and have the function to do calculation. Since the unit of provided points was feet, I multiplied the distance number with 304.8 which turned the unit to millimeter. Since the TOF sensor was somewhat
+                                not very accurate, I plused or minused some numbers to calibrate based on my real run on map. 
+                            </p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab12/run_one.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab12/run_two.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>Following are the functions to control the distance moving and degrees turning. The distance control used the PID control, while the degree directly used the open loop.</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="700" height="500" src="assets/Lab12/dist.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab12/degree.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                            <p>These are the helper function for calculating the distance and degrees. The distance used Pythagorean theore, and the degrees used the tangent from trigonometric functions</p>
+                            <span class="d-none d-lg-block"><img class="img-fluid mx-auto mb-2" width="500" height="300" src="assets/Lab12/other.jpg" alt="..." /></span>
+                            <br> <!--New Line-->
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <div class="subheading mb-3">Result</div>
+                            <p> The video of final run of my car was as below, which was the best one out of other runs. Since I did not apply the localization method, the car did not know its position, there were some 
+                                small mistakes throughout the running, both in distance and direction. The car hit the most points, but at the last one, it turned a little bit too much which moved slightly toward wrong 
+                                directions. 
+                            </p>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/xQgVPMmaikg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
